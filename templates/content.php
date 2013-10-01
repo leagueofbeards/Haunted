@@ -1,4 +1,5 @@
 <?php namespace Habari; ?>
+<?php $title = 'Content'; ?>
 <?php Haunted::show('admin.header'); ?>
 <header class="row">
 	<h1><img src="https://habariproject.org/user/themes/hipo/images/habari_logo.png"></h1>
