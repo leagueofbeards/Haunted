@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pluggable type="plugin">
+	<name>Haunted, a Ghostly Admin</name>
+	<license url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software License 2.0</license>
+	<author url="http://leagueofbeards.com/">League of Beards</author>
+	<version>1.0</version>
+	<url>http://leagueofbeards.com/</url>
+	<description><![CDATA[We put a ghost in your admin.]]></description>
+	<guid>6AD2D5D3-87B0-458A-9276-67B8BFDB2A5F</guid>
+	<copyright>2013</copyright>
+</pluggable>
