@@ -14,6 +14,7 @@
 	<?php Haunted::css('css/fontawesome.min'); ?>
 	<script src="//code.jquery.com/jquery-latest.min.js"></script>
 	<?php Haunted::js('jquery.tagsinput'); ?>
+	<?php Haunted::js('fullscreen'); ?>	
 	<?php Haunted::js('dropzone'); ?>
 	<script type="text/javascript">
 	if ( typeof(ADMIN) == "undefined" ) { ADMIN = {}; }

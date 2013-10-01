@@ -197,7 +197,14 @@ header {
 		margin-right: 20px;
 		margin-top: 5px;
 	}
-	
+		header #user_settings i {
+			color: #aaa;
+			float:right;
+			font-size: 20px;
+			margin-top: 6px;
+			margin-left: 5px;
+		}
+		
 		header #user_settings span {
 			float:left;
 			margin-top: 1px;
@@ -384,7 +391,7 @@ header {
 	#content_title i {
 		position:absolute;
 		right: 10px;
-		top: 8px;
+		top: 9px;
 		font-size: 30px;
 		color: #ddd;
 		cursor: pointer;

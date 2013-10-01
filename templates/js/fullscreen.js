@@ -40,9 +40,11 @@
                     return document[this.prefix + 'FullScreen'];
             }
         }
+        
         fullScreenApi.requestFullScreen = function(el) {
             return (this.prefix === '') ? el.requestFullScreen() : el[this.prefix + 'RequestFullScreen']();
         }
+        
         fullScreenApi.cancelFullScreen = function(el) {
             return (this.prefix === '') ? document.cancelFullScreen() : document[this.prefix + 'CancelFullScreen']();
         }
@@ -51,8 +53,7 @@
     // jQuery plugin
     if (typeof jQuery != 'undefined') {
         jQuery.fn.requestFullScreen = function() {
- 
-            return this.each(function() {
+             return this.each(function() {
                 if (fullScreenApi.supportsFullScreen) {
                     fullScreenApi.requestFullScreen(this);
                 }

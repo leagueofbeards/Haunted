@@ -9,7 +9,10 @@
 			<li><a href="<?php Site::out_url('admin'); ?>/plugins" title="manage your plugins">Function</a></li>
 			<li><a href="<?php Site::out_url('admin'); ?>/settings" title="Update your settings">Settings</a></li>
 		</ul>
-		<div id="user_settings" class=""><img src="https://www.gravatar.com/avatar/<?php echo md5($user->email); ?>"></div>
+		<div id="user_settings" class="">
+			<img src="https://www.gravatar.com/avatar/<?php echo md5($user->email); ?>">
+			<i id="fullscreen" class="icon-fullscreen"></i>
+		</div>
 	</header>
 	<form id="edit_form" method="post" action="<?php URL::out( 'auth_ajax', array('context' => 'save_content', 'id' => $post->id) ); ?>">
 		<section id="editarea" class="row">
