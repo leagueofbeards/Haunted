@@ -121,6 +121,12 @@ html {
 	height:100%;
 }
 
+hr {
+	border:0px;
+	background: #eee;
+	height: 1px;
+}
+
 section {
 	padding-top: 60px;
 }
@@ -737,3 +743,7 @@ header {
 	#features thead {
 		background: #eee;
 	}
+	
+#blocksconfigure h2 {
+	font-size: 18px;
+}

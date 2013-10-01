@@ -45,6 +45,22 @@ class Haunted extends Plugin {
 	public function action_admin_theme_get_themes($handler, $theme) {
 		$theme->title = 'Design';
 		$theme->designs = $this->get_themes();
+
+		$blocks = $this->prepare_block_list($theme);
+		$blocks_areas_t = DB::get_results( 'SELECT b.*, ba.scope_id, ba.area, ba.display_order FROM {blocks} b INNER JOIN {blocks_areas} ba ON ba.block_id = b.id ORDER BY ba.scope_id ASC, ba.area ASC, ba.display_order ASC', array() );
+		$blocks_areas = array();
+				
+		foreach ( $blocks_areas_t as $block ) {
+			if ( !isset( $blocks_areas[$block->scope_id] ) ) {
+				$blocks_areas[$block->scope_id] = array();
+			}
+			
+			$blocks_areas[$block->scope_id][$block->area][$block->display_order] = $block;
+		}
+				
+		$theme->blocks_areas = $blocks_areas;
+		$theme->areas = $this->get_areas(0);
+		
 		$theme->display('design');		
 		exit;
 	}
@@ -58,7 +74,7 @@ class Haunted extends Plugin {
 
 	private function get_themes() {
 		$ret = new \stdClass();
-		
+				
 		$all_themes = Themes::get_all_data();
 		$theme_names = Utils::array_map_field($all_themes, 'name');
 
@@ -89,11 +105,79 @@ class Haunted extends Plugin {
 		$ret->active_theme_name = $ret->active_theme['info']->name;
 		$ret->configurable = Plugins::filter( 'theme_config', false, $ret->active_theme );
 		$ret->previewed = Themes::get_theme_dir( false );
-
+		
 		$ret->help = isset($this->theme->active_theme['info']->help) ? $ret->active_theme['info']->help : false;
 		$ret->help_active = Controller::get_var('help') == $ret->active_theme['dir'];
 
+		$scopes = DB::get_results( 'SELECT * FROM {scopes} ORDER BY name ASC;' );
+		$scopes = Plugins::filter( 'get_scopes', $scopes );
+		
+		$ret->scopes = $scopes;
+		$ret->scopeid = 0;
+
 		return $ret;
+	}
+
+	private function get_areas($scope) {
+		$activedata = Themes::get_active_data( true );
+		$areas = array();
+		
+		if ( isset( $activedata['info']->areas->area ) ) {
+			foreach ( $activedata['info']->areas->area as $area ) {
+				$detail = array();
+				if(isset($area['title'])) {
+					$detail['title'] = (string)$area['title'];
+				}
+				else {
+					$detail['title'] = (string)$area['name'];
+				}
+				$detail['description'] = (string)$area->description;
+				$areas[(string)$area['name']] = $detail;
+			}
+		}
+		
+		$areas = Plugins::filter('areas', $areas, $scope);
+		return $areas;
+	}
+
+	private function prepare_block_list($theme) {
+		$ret = new \stdClass();
+		
+		$block_types = Plugins::filter( 'block_list', array() );
+		$dash_blocks = Plugins::filter( 'dashboard_block_list', array() );
+		$block_types = array_diff_key($block_types, $dash_blocks);
+		$all_block_instances = DB::get_results( 'SELECT b.* FROM {blocks} b ORDER BY b.title ASC', array(), 'Block' );
+		$block_instances = array();
+		$invalid_block_instances = array();
+
+		// get dashboard block instances from plugins that may not be active
+		$dash_blocks_instances = array();
+		$scopes = $theme->get_scopes( 'dashboard' );
+			
+		foreach( $scopes as $scope ) {
+			$dash_blocks_instances = array_merge( $dash_blocks, $theme->get_blocks( 'dashboard', $scope->id, $theme ) );
+		}
+		
+		$dash_blocks_instances = array_merge( $dash_blocks_instances, $theme->get_blocks( 'dashboard', 0, $theme ) );
+		
+		foreach( $dash_blocks_instances as $dash_instance) {
+			$dash_blocks[$dash_instance->type] = $dash_instance->type;
+		}
+
+		foreach($all_block_instances as $instance) {
+			if(isset($block_types[$instance->type])) {
+				$block_instances[] = $instance;
+			} elseif(isset($dash_blocks[$instance->type])) {
+				// Do not add this dashboard block to the block instance list on the theme page
+			} else {
+				$instance->invalid_message = _t('This data is for a block of type "%s", which is no longer provided by a theme or plugin.', array($instance->type));
+				$invalid_block_instances[] = $instance;
+			}
+		}
+		
+		$theme->blocks = $block_types;
+		$theme->block_instances = $block_instances;
+		$theme->invalid_block_instances = $invalid_block_instances;
 	}
 
 	public static function show($file) {

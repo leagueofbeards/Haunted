@@ -107,6 +107,11 @@
 					<span class="status">Features &amp; Information for</span> <span class="type"><?php echo $designs->active_theme['name']; ?></span>
 				</h4>
 				<div class="post_content">
+					<?php if ( isset( $active_theme['info']->help ) ): ?>
+						<h3 class="feature_heading">Help</h3>
+						<?php echo Pluggable::get_xml_text($designs->active_theme['info']['filename'], $designs->active_theme['info']->help); ?>
+						<hr>
+					<?php endif; ?>
 					<h3 class="feature_heading">Theme Features</h3>
 					<table id="features">
 						<thead>
@@ -146,9 +151,34 @@
 							</tr>
 						</tbody>
 					</table>
-					<?php if ( isset( $active_theme['info']->help ) ): ?>
-						<h3>Help</h3>
-						<?php echo Pluggable::get_xml_text($designs->active_theme['info']['filename'], $designs->active_theme['info']->help); ?>
+					<hr>
+					<?php
+						// Capture the admin config output.  If nothing is there, don't output the section
+						ob_start();
+						Plugins::act( 'theme_ui', $designs->active_theme );
+						$output = ob_get_clean();
+						if (trim($output) != '') :
+					?>				
+						<div class="item">
+							<h3><?php _e( "General" ); ?></h3>
+							<?php echo $output; ?>
+							<div></div>
+						</div>
+					<?php endif; ?>
+					
+					<?php if ( isset($designs->active_theme['info']->areas) ): ?>
+						<div id="blocksconfigure" class="item container">
+							<h3 class="feature_heading"><?php _e( "Areas" ); ?></h3>
+							<div id="block_add" class="columns ten">
+								<?php $this->display('block_instances'); ?>
+							</div>
+							<div class="columns four">
+								<div id="scope_container">
+									<?php $this->display('block_areas'); ?>
+								</div>
+								<div class="formcontrol"><div class="content_controls"><input type="submit" id="save_areas" class="publish" disabled="disabled" value="<?php _e('Save'); ?>"></div>
+							</div>
+						</div>
 					<?php endif; ?>
 				</div>
 			</div>
