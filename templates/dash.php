@@ -5,7 +5,7 @@
 	<ul>
 		<li><a class="dash selected" href="<?php Site::out_url('admin'); ?>/dash" title="Veiew the Dashboard">Dashboard</a></li>
 		<li><a class="content" href="<?php Site::out_url('admin'); ?>/content" title="View your content">Content</a></li>
-		<li><a href="<?php Site::out_url('admin'); ?>/design" title="Manage your themes">Design</a></li>
+		<li><a href="<?php Site::out_url('admin'); ?>/themes" title="Manage your themes">Design</a></li>
 		<li><a href="<?php Site::out_url('admin'); ?>/plugins" title="manage your plugins">Function</a></li>
 		<li><a href="<?php Site::out_url('admin'); ?>/settings" title="Update your settings">Settings</a></li>
 	</ul>

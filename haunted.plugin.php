@@ -21,6 +21,7 @@ class Haunted extends Plugin {
 			case 'edit':
 			case 'design':
 			case 'function':
+			case 'settings':			
 				$require_any = array( 'manage_posts' => true );
 			break;
 		}
@@ -41,7 +42,7 @@ class Haunted extends Plugin {
 		exit;
 	}
 
-	public function action_admin_theme_get_design($handler, $theme) {
+	public function action_admin_theme_get_themes($handler, $theme) {
 		$theme->title = 'Design';
 		$theme->designs = $this->get_themes();
 		$theme->display('design');		

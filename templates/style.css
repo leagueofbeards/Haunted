@@ -713,3 +713,27 @@ header {
 #editor_area {
 	padding-bottom: 50px !important;
 }
+
+.feature_heading {
+	margin-top: 0px;
+	margin-bottom:10px;
+}
+
+#features {
+	width: 100%;
+	margin-top: 0px;
+}
+	#features td {
+		padding: 5px 10px;
+	}
+		#features td.info i {
+			background: #f1c40f;
+			border-radius: 50%;
+			color: #fff;
+			float:left;
+			padding: 0px 5px;
+			line-height: 20px;
+		}
+	#features thead {
+		background: #eee;
+	}

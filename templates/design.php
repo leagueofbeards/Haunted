@@ -46,7 +46,6 @@
 							<?php endif; ?>
 						</div>
 						<div class="c3 end meta">
-							<div class="content_controls"><input id="delete" class="delete" type="submit" value="Deactivate"></div>
 						</div>
 					</li>
 					
@@ -74,7 +73,27 @@
 							</div>
 						</div>
 						<div class="c2 end meta">
-							<div class="content_controls"><input id="save" class="publish" type="submit" value="Activate"></div>
+							<div class="content_controls">
+							<?php				
+								$dbtn = FormControlDropbutton::create('actions');
+								$preview = FormControlDropbutton::create('actions');
+								
+								$dbtn->append(FormControlSubmit::create('activate')->add_class('publish')->set_url(URL::get( 'activate_theme', 'theme_dir=' . $thm['dir'] . '&theme_name=' . $thm['info']->name ))->set_caption(_t('Activate')));
+
+								if ($designs->previewed == $thm['dir']) {
+									$preview->append(FormControlSubmit::create('end_preview')->add_class('delete')->set_url(URL::get( 'preview_theme', 'theme_dir=' . $thm['dir'] . '&theme_name=' . $thm['info']->name ))->set_caption(_t('End Preview')));
+								} else {
+									$preview->append(FormControlSubmit::create('preview')->add_class('draft')->set_url(URL::get( 'preview_theme', 'theme_dir=' . $thm['dir'] . '&theme_name=' . $thm['info']->name ))->set_caption(_t('Preview')));
+								}
+								
+								echo $dbtn->pre_out();
+								echo $dbtn->get( $theme );
+								
+								echo $preview->pre_out();
+								echo $preview->get( $theme );
+								
+								?>
+							</div>
 						</div>
 					</li>
 					<?php endif; ?>
@@ -83,14 +102,50 @@
 			</div>
 		</div>
 		<div id="content" class="c6 end">
-			<div class="post">				
+			<div class="post">
 				<h4>
 					<span class="status">Features &amp; Information for</span> <span class="type"><?php echo $designs->active_theme['name']; ?></span>
-					<span class="controls">
-						<a class="edit_link" href="<?php URL::out('admin', array('page' => 'edit', 'id' => $content[0]->id)); ?>"><i class="icon-off"></i></a>
-					</span>
 				</h4>
 				<div class="post_content">
+					<h3 class="feature_heading">Theme Features</h3>
+					<table id="features">
+						<thead>
+							<tr>
+								<td width="5%"></td>							
+								<td>Feature</td>
+								<td width="10%" style="text-align:right;">Support?</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="info"><i class="icon-question"></i></td>							
+								<td>Configurable</td>
+								<?php if( $designs->configurable ) { ?>
+								<td style="text-align:center;"><i class="icon-ok"></i></td>
+								<?php } else { ?>
+								<td style="text-align:center;"><i class="icon-remove"></i></td>
+								<?php } ?>
+							</tr>						
+							<tr>
+								<td class="info"><i class="icon-question"></i></td>							
+								<td>Blocks and Areas</td>
+								<?php if( $designs->active_theme['info']->areas ) { ?>
+								<td style="text-align:center;"><i class="icon-ok"></i></td>
+								<?php } else { ?>
+								<td style="text-align:center;"><i class="icon-remove"></i></td>
+								<?php } ?>
+							</tr>
+							<tr>
+								<td class="info"><i class="icon-question"></i></td>							
+								<td>Child Theme</td>
+								<?php if( $designs->active_theme['info']->parent ) { ?>
+								<td style="text-align:center;"><i class="icon-ok"></i></td>
+								<?php } else { ?>
+								<td style="text-align:center;"><i class="icon-remove"></i></td>
+								<?php } ?>
+							</tr>
+						</tbody>
+					</table>
 					<?php if ( isset( $active_theme['info']->help ) ): ?>
 						<h3>Help</h3>
 						<?php echo Pluggable::get_xml_text($designs->active_theme['info']['filename'], $designs->active_theme['info']->help); ?>
