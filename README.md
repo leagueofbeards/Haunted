@@ -3,6 +3,8 @@ Haunted
 
 A Ghost (http://tryghost.org) inspired Admin Experience for Habari
 
+**PLEASE NOTE:** This is not ready for use, unless you like things blowing up.
+
 Some screens!
 
 *The Content Overview Screen*
