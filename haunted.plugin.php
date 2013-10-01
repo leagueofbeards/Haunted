@@ -37,7 +37,6 @@ class Haunted extends Plugin {
 	public function action_admin_theme_get_content($handler, $theme) {
 		$theme->content = Posts::get( array('nolimit' => true, 'orderby' => 'pubdate DESC') );
 		$theme->types = Post::list_active_post_types();
-		$theme->title = 'Content';
 		$theme->display('content');
 		exit;
 	}
@@ -88,36 +87,11 @@ class Haunted extends Plugin {
 		// If the active theme is configurable, allow it to configure
 		$ret->active_theme_name = $ret->active_theme['info']->name;
 		$ret->configurable = Plugins::filter( 'theme_config', false, $ret->active_theme );
-/* 		$theme->assign( 'configure', Controller::get_var( 'configure' ) ); */
-
-/* 		$ret->areas = $this->get_areas(0); */
 		$ret->previewed = Themes::get_theme_dir( false );
 
 		$ret->help = isset($this->theme->active_theme['info']->help) ? $ret->active_theme['info']->help : false;
 		$ret->help_active = Controller::get_var('help') == $ret->active_theme['dir'];
-/*
-		$this->prepare_block_list();
 
-		$blocks_areas_t = DB::get_results( 'SELECT b.*, ba.scope_id, ba.area, ba.display_order FROM {blocks} b INNER JOIN {blocks_areas} ba ON ba.block_id = b.id ORDER BY ba.scope_id ASC, ba.area ASC, ba.display_order ASC', array() );
-		$blocks_areas = array();
-		
-		foreach ( $blocks_areas_t as $block ) {
-			if ( !isset( $blocks_areas[$block->scope_id] ) ) {
-				$blocks_areas[$block->scope_id] = array();
-			}
-			
-			$blocks_areas[$block->scope_id][$block->area][$block->display_order] = $block;
-		}
-		
-		$theme->blocks_areas = $blocks_areas;
-*/
-
-/*
-		$scopes = DB::get_results( 'SELECT * FROM {scopes} ORDER BY name ASC;' );
-		$scopes = Plugins::filter( 'get_scopes', $scopes );
-		$theme->scopes = $scopes;
-		$theme->scopeid = 0;
-*/
 		return $ret;
 	}
 
@@ -206,6 +180,7 @@ class Haunted extends Plugin {
 		$args['limit'] = 50;
 		$args['public'] = 1;
 		$args['orderby'] = 'id DESC';
+		$page = $vars['page'] ? $vars['page'] : 1;
 		
 		if( !empty($vars['tags']) ) {
 			$tags = array_merge( $tags, $vars['tags'] );
@@ -236,16 +211,14 @@ class Haunted extends Plugin {
 		}
 
 		$response = new AjaxResponse(200, null);
-		ob_end_clean();
 
 		$result['rows'] = json_decode( $content->to_json() );
 		$result['query'] = $content->get_query();
-		$result['params'] = $get_params;
 		$count = $content->count_all();
 		$result['count'] = $count;
 		$result['pages'] = ceil($count / Options::get('pagination', 5));
 		$result['page'] = $page;
-
+		
 		$response->data = $result;
 		$response->out();
 	}
