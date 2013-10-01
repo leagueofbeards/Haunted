@@ -1,4 +1,4 @@
 Haunted
 =======
 
-A Ghost inspired Admin Experience for Habari
+A Ghost (http://tryghost.org) inspired Admin Experience for Habari
