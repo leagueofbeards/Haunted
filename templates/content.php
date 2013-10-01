@@ -10,7 +10,7 @@
 		<li><a href="<?php Site::out_url('admin'); ?>/function" title="manage your plugins">Function</a></li>
 		<li><a href="<?php Site::out_url('admin'); ?>/settings" title="Update your settings">Settings</a></li>
 	</ul>
-	<div id="user_settings" class=""><img src="https://www.gravatar.com/avatar/<?php echo md5($user->email); ?>"></span></div>
+	<div id="user_settings" class=""><img src="https://www.gravatar.com/avatar/<?php echo md5($user->email); ?>"></div>
 </header>
 <section class="row">
 	<div class="c12">
@@ -48,7 +48,6 @@
 						getContent();
 					});
 				</script>
-				<ol id="paginator"></ol>
 			</div>
 		</div>
 		<div id="content" class="c6 end">
@@ -67,9 +66,9 @@
 			</div>
 		</div>
 	</div>
-</div>
 </section>
 <script>
 ADMIN.offset = 80;
 </script>
+</div>
 <?php Haunted::show('admin.footer'); ?>

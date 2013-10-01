@@ -8,8 +8,8 @@
 		    $("#inbox, #content, #content .post, #inbox #contents, #editor_area").css("height", newHeight);
 		}
 	</script>
-	<?php Haunted::js('fullscreen'); ?>
 	<?php Haunted::js('tmpl'); ?>
+	<?php Haunted::js('bootstrap.min'); ?>
 	<?php Haunted::js('application'); ?>
 </body>
 </html>

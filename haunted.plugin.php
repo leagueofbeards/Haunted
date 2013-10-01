@@ -67,6 +67,15 @@ class Haunted extends Plugin {
 
 	public function action_admin_theme_get_edit($handler, $theme) {
 		$theme->post = Post::get( array('id' => $_GET['id']) );
+		$theme->revision = $theme->post->get_revision_data( $_GET['revision'] );
+				
+		if( $theme->revision ) {
+			foreach( $theme->revision as $field ) {
+				$key = $field->change_field;
+ 				$theme->post->$key = $field->old_value;
+			}
+		}
+				
 		$theme->title = 'new';
 		$theme->display('edit');
 		exit;

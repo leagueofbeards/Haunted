@@ -1,25 +1,30 @@
 <?php namespace Habari; ?>
 <?php Haunted::show('admin.header'); ?>
-<header class="row">
-	<h1><img src="https://habariproject.org/user/themes/hipo/images/habari_logo.png"></h1>
-	<ul>
-		<li><a class="dash" href="<?php Site::out_url('admin'); ?>/dash" title="Veiew the Dashboard">Dashboard</a></li>
-		<li><a class="content selected" href="<?php Site::out_url('admin'); ?>/content" title="View your content">Content</a></li>
-		<li><a href="<?php Site::out_url('admin'); ?>/themes" title="Manage your themes">Design</a></li>
-		<li><a href="<?php Site::out_url('admin'); ?>/plugins" title="manage your plugins">Function</a></li>
-		<li><a href="<?php Site::out_url('admin'); ?>/settings" title="Update your settings">Settings</a></li>
-	</ul>
-	<div id="user_settings" class=""><img src="https://www.gravatar.com/avatar/<?php echo md5($user->email); ?>"></div>
-</header>
+	<header class="row">
+		<h1><img src="https://habariproject.org/user/themes/hipo/images/habari_logo.png"></h1>
+		<ul>
+			<li><a class="dash" href="<?php Site::out_url('admin'); ?>/dash" title="Veiew the Dashboard">Dashboard</a></li>
+			<li><a class="content selected" href="<?php Site::out_url('admin'); ?>/content" title="View your content">Content</a></li>
+			<li><a href="<?php Site::out_url('admin'); ?>/themes" title="Manage your themes">Design</a></li>
+			<li><a href="<?php Site::out_url('admin'); ?>/plugins" title="manage your plugins">Function</a></li>
+			<li><a href="<?php Site::out_url('admin'); ?>/settings" title="Update your settings">Settings</a></li>
+		</ul>
+		<div id="user_settings" class=""><img src="https://www.gravatar.com/avatar/<?php echo md5($user->email); ?>"></div>
+	</header>
 	<form id="edit_form" method="post" action="<?php URL::out( 'auth_ajax', array('context' => 'save_content', 'id' => $post->id) ); ?>">
 		<section id="editarea" class="row">
 			<div class="c12">
 				<div id="content_title" class="c12">
 					<input type="text" name="title" value="<?php echo $post->title; ?>" placeholder="Title">
+					<?php if( $post->list_revisions() ) { ?>
+					<i class="icon-time" data-placement="left" data-content="" data-toggle="popover" data-original-title="Revisions"></i>
+					<?php } ?>
 				</div>
 				<div id="inbox" class="c6">
 					<div class="items" style="padding-bottom: 140px;">
-						<div><h4>Markup</h4></div>
+						<div>
+							<h4>Markup</h4>
+						</div>
 						<div id="notes-button-bar" style="display:none;"></div>
 						<div id="editor">
 							<textarea id="editor_area" name="editor_area"><?php echo $post->content; ?></textarea>
@@ -52,11 +57,10 @@
 			</div>
 		</div>
 	</form>
-	
 	<?php Haunted::js('wmd.combined.min'); ?>
 	<?php Haunted::js('showdown'); ?>
 
-	<script type="text/javascript">
+	<script type="text/javascript">	
 		var wmd = new WMDEditor({
 			input: "editor_area",
 			preview: "preview-div",
@@ -69,6 +73,13 @@
 		ADMIN.offset = 140;
 	 	
 		$(document).ready(function() {
+			var selections = '<ul class="revisions"><?php foreach( $post->list_revisions() as $date => $id ) { ?><li><a href="<?php URL::out('admin'); ?>edit?id=<?php echo $post->id; ?>&revision=<?php echo $date; ?>" title="View this Revision"><?php echo DateTime::create($date)->format('M d, Y'); ?> at <?php echo DateTime::create($date)->format('h:m a'); ?></a></li><?php } ?></ul>';
+			
+			$('.icon-time').popover({
+					html: true,
+					content: selections,
+			});
+					
 			$('.placeholder_drop').each( function() {
 			 	var dpz = $(this).dropzone({ 
 			 		url: ADMIN.url + '/auth_ajax/upload_files', 
@@ -85,4 +96,5 @@
 			});
 	 	});
 	</script>
+</div>
 <?php Haunted::show('admin.footer'); ?>

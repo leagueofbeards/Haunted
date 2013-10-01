@@ -9,7 +9,7 @@
 		<li><a href="<?php Site::out_url('admin'); ?>/plugins" title="manage your plugins">Function</a></li>
 		<li><a href="<?php Site::out_url('admin'); ?>/settings" title="Update your settings">Settings</a></li>
 	</ul>
-	<div id="user_settings" class=""><img src="https://www.gravatar.com/avatar/<?php echo md5($user->email); ?>"></span></div>
+	<div id="user_settings" class=""><img src="https://www.gravatar.com/avatar/<?php echo md5($user->email); ?>"></div>
 </header>
 <section class="row">
 	<div class="c12">
@@ -152,7 +152,8 @@
 						</tbody>
 					</table>
 					<hr>
-					<?php
+					<!--
+<?php
 						// Capture the admin config output.  If nothing is there, don't output the section
 						ob_start();
 						Plugins::act( 'theme_ui', $designs->active_theme );
@@ -180,6 +181,7 @@
 							</div>
 						</div>
 					<?php endif; ?>
+-->
 				</div>
 			</div>
 		</div>

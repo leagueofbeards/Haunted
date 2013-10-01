@@ -19,6 +19,11 @@
 	if ( typeof(ADMIN) == "undefined" ) { ADMIN = {}; }
 		ADMIN.url = "<?php Site::out_url('habari'); ?>";
 	</script>
+
+	<!--[if IE 7]>
+	<link rel="stylesheet" type="text/css" href="<?php Site::out_url( 'admin_theme' ); ?>/css/ie.css" media="screen">
+	<![endif]-->
+
 </head>
 <body>
 	<div id="site-container" class="grid wfull">
