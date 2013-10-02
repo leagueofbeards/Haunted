@@ -5,7 +5,7 @@ class Haunted extends Plugin {
 
 	private function add_templates() {
 		$this->add_template( 'dash', dirname(__FILE__) . '/templates/dash.php' );
-		$this->add_template( 'edit', dirname(__FILE__) . '/templates/edit.php' );		
+		$this->add_template( 'edit', dirname(__FILE__) . '/templates/edit.php' );
 		$this->add_template( 'content', dirname(__FILE__) . '/templates/content.php' );
 		$this->add_template( 'design', dirname(__FILE__) . '/templates/design.php' );
 	}
@@ -77,6 +77,13 @@ class Haunted extends Plugin {
 		}
 				
 		$theme->title = 'new';
+		$theme->display('edit');
+		exit;
+	}
+
+	public function action_admin_theme_get_publish($handler, $theme) {				
+		$theme->title = 'new';
+		$theme->post = array();
 		$theme->display('edit');
 		exit;
 	}
@@ -298,7 +305,7 @@ class Haunted extends Plugin {
 
 		foreach( $content as $post ) {
 			$post->postDate = $post->pubdate->friendly(1);
-			$post->avatar = 'https://www.gravatar.com/avatar/' . md5($post->author->email); 
+			$post->avatar = $post->author ? 'https://www.gravatar.com/avatar/' . md5($post->author->email) : ''; 
 			$post->author = $post->author;
 			$post->color = self::status_color( $post );
 			$post->details = URL::get( 'auth_ajax', Utils::wsse(array('context' => 'get_details', 'id' => $post->id)) );
@@ -373,6 +380,53 @@ class Haunted extends Plugin {
 		$ar = new AjaxResponse( $status, $message, null );
 		$ar->out();
 		exit();
+	}
+
+	public function action_auth_ajax_publish_content($data) {
+		$vars = $_POST;
+		$user = User::identify();
+				
+		$postdata= array(
+				'title' 		=>	$vars['title'],
+				'slug'			=>	Utils::slugify( $vars['title'] ),
+				'content'		=>	$vars['editor_area'] ? $vars['editor_area'] : '',
+				'pubdate'		=>	DateTime::date_create( date(DATE_RFC822) ),
+				'tags'			=>	$vars['tagsinput'],
+				'user_id'		=>	$user->id,
+		);
+				
+		if( isset($_GET['state']) && $_GET['state'] == 'publish' ) {
+			$postdata['status'] = Post::status('published');
+			$postdata['pubdate'] = DateTime::date_create( date(DATE_RFC822) );
+		} elseif( isset($_GET['state']) && $_GET['state'] == 'schedule' ) {
+			$postdata['status'] = Post::status('scheduled');
+		} else {
+			$postdata['status'] = Post::status('draft');			
+		}
+
+		$content = Post::create( $postdata );
+		
+		switch( $content->status ) {
+			case Post::status('published') :
+				$message = $content->title . ' was created and Published';
+				break;
+			case Post::status('draft') :
+				$message = $content->title . ' was created and saved as Draft';
+				break;
+			case Post::status('scheduled') :
+				$message = $content->title . ' was created and Scheduled';
+				break;
+		}
+
+		if( $content ) {
+			$status = 200;
+		} else {
+			$status = 401;
+			$message = $content->title . ' wasn\'t created.';
+		}
+		
+		$ar = new AjaxResponse( $status, $message, null );
+		$ar->out();
 	}
 
 	private function upload($file, $dir) {

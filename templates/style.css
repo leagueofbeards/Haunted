@@ -779,6 +779,22 @@ header {
 		list-style:none;
 	}
 
+.new_content {
+	float:right;
+	margin-left: 15px;
+	margin-right: 0px;
+}
+	.new_content a {
+		text-decoration: none;
+	}
+	
+	.new_content i {
+		background: #3498db;
+		padding: 5px 6px;
+		color:#fff;
+		border-radius: 3px;
+	}
+
 /* == Tooltip and popover CSS from Bootstrap ==*/
 
 .tooltip {

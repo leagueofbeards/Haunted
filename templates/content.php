@@ -1,5 +1,4 @@
 <?php namespace Habari; ?>
-<?php $title = 'Content'; ?>
 <?php Haunted::show('admin.header'); ?>
 <header class="row">
 	<h1><img src="https://habariproject.org/user/themes/hipo/images/habari_logo.png"></h1>
@@ -10,22 +9,25 @@
 		<li><a href="<?php Site::out_url('admin'); ?>/function" title="manage your plugins">Function</a></li>
 		<li><a href="<?php Site::out_url('admin'); ?>/settings" title="Update your settings">Settings</a></li>
 	</ul>
-	<div id="user_settings" class=""><img src="https://www.gravatar.com/avatar/<?php echo md5($user->email); ?>"></div>
+	<div id="user_settings" class="">
+		<img src="https://www.gravatar.com/avatar/<?php echo md5($user->email); ?>">
+		<i id="fullscreen" class="icon-fullscreen"></i>
+	</div>
 </header>
 <section class="row">
 	<div class="c12">
 		<div id="inbox" class="c6">
 			<div class="items">
 				<h4>
-				<form id="filter_contents" action="<?php URL::out('auth_ajax', Utils::wsse(array('context' => 'filter_contents')) ); ?>" method="get">
-					<?php echo Utils::setup_wsse(); ?>
-					<select name="content_type" id="content_type">
-						<?php foreach( $types as $type => $id ) { ?>
-							<option value="<?php echo $id; ?>"><?php echo ucfirst($type); ?></option>
-						<?php } ?>
-					</select>
-					<span class="search"><input id="search" name="search" type="text"> <i class="icon-search"></i></span>
-				</form>
+					<form id="filter_contents" action="<?php URL::out('auth_ajax', Utils::wsse(array('context' => 'filter_contents')) ); ?>" method="get">
+						<?php echo Utils::setup_wsse(); ?>
+						<select name="content_type" id="content_type">
+							<?php foreach( $types as $type => $id ) { ?>
+								<option value="<?php echo $id; ?>"><?php echo ucfirst($type); ?></option>
+							<?php } ?>
+						</select>
+						<span class="search"><input id="search" name="search" type="text"> <i class="icon-search"></i> <span class="new_content"><a href="<?php URL::out('admin', array('page' => 'publish')); ?>"><i class="icon-plus"></i></a></span></span>
+					</form>
 				</h4>
 				<ul id="contents">
 					<script type="text/html" id="contentrow">
@@ -53,7 +55,7 @@
 		<div id="content" class="c6 end">
 			<div class="post">				
 				<h4>
-					<span class="status">Published</span> <i class="icon-angle-right"></i> <span class="type"><?php echo Post::type_name($content[0]->content_type); ?></span>
+					<span class="type"><?php echo Post::type_name($content[0]->content_type); ?></span> <i class="icon-angle-right"></i> <span class="status">Published</span>
 					<span class="controls">
 						<a href=""><i class="icon-trash"></i></a>
 						<a href="<?php echo $content[0]->permalink; ?>" target="_blank"><i class="icon-desktop"></i></a>

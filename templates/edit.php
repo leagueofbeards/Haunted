@@ -14,12 +14,16 @@
 			<i id="fullscreen" class="icon-fullscreen"></i>
 		</div>
 	</header>
+<?php if( isset($post->id) ) { ?>
 	<form id="edit_form" method="post" action="<?php URL::out( 'auth_ajax', array('context' => 'save_content', 'id' => $post->id) ); ?>">
+<?php } else { ?>
+	<form id="edit_form" method="post" action="<?php URL::out( 'auth_ajax', array('context' => 'publish_content') ); ?>">	
+<?php } ?>
 		<section id="editarea" class="row">
 			<div class="c12">
 				<div id="content_title" class="c12">
-					<input type="text" name="title" value="<?php echo $post->title; ?>" placeholder="Title">
-					<?php if( $post->list_revisions() ) { ?>
+					<input type="text" name="title" value="<?php echo $post ? $post->title : ''; ?>" placeholder="Title">
+					<?php if( $post && $post->list_revisions() ) { ?>
 					<i class="icon-time" data-placement="left" data-content="" data-toggle="popover" data-original-title="Revisions"></i>
 					<?php } ?>
 				</div>
@@ -30,7 +34,7 @@
 						</div>
 						<div id="notes-button-bar" style="display:none;"></div>
 						<div id="editor">
-							<textarea id="editor_area" name="editor_area"><?php echo $post->content; ?></textarea>
+							<textarea id="editor_area" name="editor_area"><?php echo $post ? $post->content : ''; ?></textarea>
 						</div>
 					</div>
 				</div>
@@ -45,17 +49,21 @@
 		<div id="footerbar">
 			<i class="icon-tags"></i>
 			<div class="tag_container">
-				<input name="tagsinput" id="tagsinput" style="display:none;" type="text" class="tagsinput" value="<?php echo Haunted::format_tags( $post->tags, ' ', ', ' ); ?>">
+				<input name="tagsinput" id="tagsinput" style="display:none;" type="text" class="tagsinput" value="<?php echo $post ? Haunted::format_tags( $post->tags, ' ', ', ' ) : ''; ?>">
 			</div>
 			<div class="content_controls">
-				<div class="results"><span>Last updated <?php echo $post->updated->fuzzy(); ?>.</span></div>
-				<?php if( $post->status != Post::status('published') ) { ?>
+				<div class="results"><span><?php echo $post ? 'Last updated ' . $post->updated->fuzzy() . '.' : ''; ?></span></div>
+				<?php if( $post && $post->status != Post::status('published') ) { ?>
 					<input id="draft" class="draft" type="submit" value="Save Draft">
 					<input id="schedule" class="schedule" type="submit" value="Schedule">
 					<input id="publish" class="publish" type="submit" value="Publish">
-				<?php } else { ?>
+				<?php } elseif( $post && $post->status == Post::status('published') ) { ?>
 					<input id="delete" class="delete" type="submit" value="Delete">
 					<input id="save" class="publish" type="submit" value="Save">
+				<?php } else { ?>
+					<input id="draft" class="draft" type="submit" value="Save Draft">
+					<input id="schedule" class="schedule" type="submit" value="Schedule">
+					<input id="publish" class="publish" type="submit" value="Publish">
 				<?php } ?>
 			</div>
 		</div>
@@ -76,12 +84,15 @@
 		ADMIN.offset = 140;
 	 	
 		$(document).ready(function() {
+			<?php if( $post ) { ?>
 			var selections = '<ul class="revisions"><?php foreach( $post->list_revisions() as $date => $id ) { ?><li><a href="<?php URL::out('admin'); ?>edit?id=<?php echo $post->id; ?>&revision=<?php echo $date; ?>" title="View this Revision"><?php echo DateTime::create($date)->format('M d, Y'); ?> at <?php echo DateTime::create($date)->format('h:m a'); ?></a></li><?php } ?></ul>';
 			
 			$('.icon-time').popover({
 				html: true,
 				content: selections,
 			});
+			
+			<?php } ?>
 			
 			activateDrops();
 
