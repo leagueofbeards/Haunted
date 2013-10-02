@@ -111,6 +111,7 @@ Showdown.converter = function () {
 			if (left.match(/<([a-z]+)\s[^>]+>?$/) && right.match(/^[^>]*>/)) {return wholeMatch;}
 			return "<a href='" + wholeMatch + "'>" + wholeMatch + "</a>";
 		});
+		
 		text = text.replace(/[a-z0-9_\-+=.]+@[a-z0-9\-]+(\.[a-z0-9\-]+)+/ig, function (wholeMatch, m1, matchIndex) {
 			var left = text.slice(Math.max(0,text.lastIndexOf('\n',matchIndex)), matchIndex);
 			if (left.match(/<([a-z]+)\s[^>]+>?$/) || left.match(/mailto\:$/)) {return wholeMatch;}
@@ -353,6 +354,7 @@ Showdown.converter = function () {
 
 		// Do hard breaks:
 		text = text.replace(/ {2,}\n/g, " <br />\n");
+				
 		return text;
 	};
 
@@ -526,6 +528,7 @@ Showdown.converter = function () {
 	};
 
 	var placeholderTag = function (wholeMatch, m1, m2, m3, m4, m5, m6, m7) {
+		var id = Date.now();
 		html = '<div data-id="' + m2 +  '" class="placeholder_drop">';
 		html += '<i class="icon-camera-retro icon-4x"></i><br> Add an image of <strong>' + m2 + '</strong></div>';
 		return html;

@@ -79,15 +79,37 @@
 			var selections = '<ul class="revisions"><?php foreach( $post->list_revisions() as $date => $id ) { ?><li><a href="<?php URL::out('admin'); ?>edit?id=<?php echo $post->id; ?>&revision=<?php echo $date; ?>" title="View this Revision"><?php echo DateTime::create($date)->format('M d, Y'); ?> at <?php echo DateTime::create($date)->format('h:m a'); ?></a></li><?php } ?></ul>';
 			
 			$('.icon-time').popover({
-					html: true,
-					content: selections,
+				html: true,
+				content: selections,
 			});
-					
+			
+			activateDrops();
+
+			$('#preview-div').bind('DOMNodeInserted DOMNodeRemoved', function() {
+				$('.placeholder_drop').each( function() {
+				 	var dpz = $(this).dropzone({ 
+					 		url: ADMIN.url + '/auth_ajax/upload_files', 
+					 		previewTemplate: '<div id="dndPreview" class="dz-preview dz-file-preview" style="display:none;"><div class="dz-details"><div class="dz-filename"><span data-dz-name></span></div><div class="dz-size" data-dz-size></div><img data-dz-thumbnail /></div><div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div></div>',
+					 		success: showMe
+				 		});
+				 	
+				 	function showMe(file, r) {
+				 		var which = dpz.data('id');
+				 		var str = '!dnd[' + which + ']';
+				 		var new_str = $('#editor_area').val();
+				 		var parsed = new_str.replace(str, '![](' + ADMIN.url + '/' + r.data + ')');
+ 				 		$('#editor_area').val( parsed );
+				 	}
+				});
+			});
+	 	});
+
+		function activateDrops() {
 			$('.placeholder_drop').each( function() {
 			 	var dpz = $(this).dropzone({ 
-			 		url: ADMIN.url + '/auth_ajax/upload_files', 
-			 		previewTemplate: '<div id="dndPreview" class="dz-preview dz-file-preview" style="display:none;"><div class="dz-details"><div class="dz-filename"><span data-dz-name></span></div><div class="dz-size" data-dz-size></div><img data-dz-thumbnail /></div><div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div></div>',
-			 		success: showMe
+				 		url: ADMIN.url + '/auth_ajax/upload_files', 
+				 		previewTemplate: '<div id="dndPreview" class="dz-preview dz-file-preview" style="display:none;"><div class="dz-details"><div class="dz-filename"><span data-dz-name></span></div><div class="dz-size" data-dz-size></div><img data-dz-thumbnail /></div><div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div></div>',
+				 		success: showMe
 			 		});
 			 	
 			 	function showMe(file, r) {
@@ -97,7 +119,8 @@
 			 		$('#editor_area').html( new_str );
 			 	}
 			});
-	 	});
+		}
+
 	</script>
 </div>
 <?php Haunted::show('admin.footer'); ?>

@@ -203,6 +203,7 @@ header {
 			font-size: 20px;
 			margin-top: 6px;
 			margin-left: 5px;
+			cursor: pointer;
 		}
 		
 		header #user_settings span {
