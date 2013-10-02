@@ -385,7 +385,7 @@ class Haunted extends Plugin {
 	public function action_auth_ajax_publish_content($data) {
 		$vars = $_POST;
 		$user = User::identify();
-				
+
 		$postdata= array(
 				'title' 		=>	$vars['title'],
 				'slug'			=>	Utils::slugify( $vars['title'] ),
@@ -393,8 +393,9 @@ class Haunted extends Plugin {
 				'pubdate'		=>	DateTime::date_create( date(DATE_RFC822) ),
 				'tags'			=>	$vars['tagsinput'],
 				'user_id'		=>	$user->id,
+				'content_type'	=>	$_GET['type'],
 		);
-				
+
 		if( isset($_GET['state']) && $_GET['state'] == 'publish' ) {
 			$postdata['status'] = Post::status('published');
 			$postdata['pubdate'] = DateTime::date_create( date(DATE_RFC822) );

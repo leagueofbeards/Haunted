@@ -770,15 +770,6 @@ header {
 	font-size: 18px;
 }
 
-.revisions {
-	float:left;
-	margin: 10px 10px 10px 0px;
-	padding-left:0px;
-}
-	.revisions li {
-		list-style:none;
-	}
-
 .new_content {
 	float:right;
 	margin-left: 15px;
@@ -793,7 +784,35 @@ header {
 		padding: 5px 6px;
 		color:#fff;
 		border-radius: 3px;
+		cursor: pointer;
 	}
+
+.revisions, .post_types {
+	float:left;
+	margin: 0px 10px 10px 0px;
+	padding-left:0px;
+}
+	.revisions li, .post_types li {
+		list-style: none;
+	}
+		.post_types li {
+			margin: 10px 0px 15px 0px;
+		}
+		
+		.post_types li a i {
+			background: #ddd;
+			padding: 5px 6px;
+			margin-right: 5px;
+			color:#fff;
+			border-radius: 3px;
+		}
+		
+		.revisions li a, .post_types li a {
+			text-decoration: none;
+		}
+			.revisions li a:hover, .post_types li a:hover {
+				color: #333;
+			}
 
 /* == Tooltip and popover CSS from Bootstrap ==*/
 

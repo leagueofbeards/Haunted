@@ -63,7 +63,7 @@ $(document).ready(function() {
 
 	$('#draft').on('click', function() {
 		var data = $('#edit_form').serialize();
-		var url = $('#edit_form').attr('action') + '?state=draft';
+		var url = $('#edit_form').attr('action') + '&state=draft';
 		$('.results span').html( '<i id="progress" class="icon-spinner icon-spin icon-large"></i>' );
 		
 		$.post( url, data, function(r) {
@@ -77,7 +77,7 @@ $(document).ready(function() {
 
 	$('#publish').on('click', function() {
 		var data = $('#edit_form').serialize();
-		var url = $('#edit_form').attr('action') + '?state=publish';
+		var url = $('#edit_form').attr('action') + '&state=publish';
 		$('.results span').html( '<i id="progress" class="icon-spinner icon-spin icon-large"></i>' );
 		
 		$.post( url, data, function(r) {

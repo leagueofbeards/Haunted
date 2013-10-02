@@ -26,7 +26,7 @@
 								<option value="<?php echo $id; ?>"><?php echo ucfirst($type); ?></option>
 							<?php } ?>
 						</select>
-						<span class="search"><input id="search" name="search" type="text"> <i class="icon-search"></i> <span class="new_content"><a href="<?php URL::out('admin', array('page' => 'publish')); ?>"><i class="icon-plus"></i></a></span></span>
+						<span class="search"><input id="search" name="search" type="text"> <i class="icon-search"></i> <span class="new_content"><i class="icon-plus" data-placement="bottom" data-content="" data-toggle="popover" data-original-title="Choose a Type"></i></span></span>
 					</form>
 				</h4>
 				<ul id="contents">
@@ -70,7 +70,15 @@
 	</div>
 </section>
 <script>
-ADMIN.offset = 80;
+	ADMIN.offset = 80;
+
+	var selections = '<ol class="post_types"><?php foreach( $types as $type => $id ) { if( $id != 0 ) { ?><li><a href="<?php URL::out('admin', array('page' => 'publish', 'type' => $id)); ?>" title="Create a new <?php echo ucfirst($type); ?>"><i class="icon-plus"></i> Create a new <?php echo ucfirst($type); ?></a></li><?php }} ?></ol>';
+		$('.icon-plus').popover({
+			html: true,
+			content: selections,
+			container: 'body',
+		});
+
 </script>
 </div>
 <?php Haunted::show('admin.footer'); ?>

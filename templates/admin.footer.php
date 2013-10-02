@@ -19,7 +19,6 @@
 		
 	</script>
 	<?php Haunted::js('tmpl'); ?>
-	<?php Haunted::js('bootstrap.min'); ?>
 	<?php Haunted::js('application'); ?>
 </body>
 </html>

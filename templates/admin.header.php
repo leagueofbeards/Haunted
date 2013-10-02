@@ -16,6 +16,7 @@
 	<?php Haunted::js('jquery.tagsinput'); ?>
 	<?php Haunted::js('fullscreen'); ?>	
 	<?php Haunted::js('dropzone'); ?>
+	<?php Haunted::js('bootstrap.min'); ?>
 	<script type="text/javascript">
 	if ( typeof(ADMIN) == "undefined" ) { ADMIN = {}; }
 		ADMIN.url = "<?php Site::out_url('habari'); ?>";

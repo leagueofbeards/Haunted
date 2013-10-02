@@ -17,7 +17,7 @@
 <?php if( isset($post->id) ) { ?>
 	<form id="edit_form" method="post" action="<?php URL::out( 'auth_ajax', array('context' => 'save_content', 'id' => $post->id) ); ?>">
 <?php } else { ?>
-	<form id="edit_form" method="post" action="<?php URL::out( 'auth_ajax', array('context' => 'publish_content') ); ?>">	
+	<form id="edit_form" method="post" action="<?php URL::out( 'auth_ajax', array('context' => 'publish_content', 'type' => $_GET['type']) ); ?>">	
 <?php } ?>
 		<section id="editarea" class="row">
 			<div class="c12">
